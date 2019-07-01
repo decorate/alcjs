@@ -1,6 +1,6 @@
 {
   "name": "@team-decorate/alcjs",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "",
   "main": "dist/alc.common.js",
   "unpkg": "dist/alc.umd.js",
