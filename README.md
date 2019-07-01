@@ -7,7 +7,7 @@
   
 With npm:  
   
- npm install @team-decorate/alcjs  
+ 	npm install @team-decorate/alcjs  
  ### Usage  
   
 #### Model create  
