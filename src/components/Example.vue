@@ -16,8 +16,8 @@
         },
 
         async created() {
-            const m = new User({name: 'ok'})
-            console.log(m.getPostable())
+            const m = new User({name: 'ok', user_detail: 'goo'})
+            console.log(m, m.getPostable())
         },
 
         methods: {
@@ -28,12 +28,15 @@
         constructor(data) {
             super()
 
-            this.fillable = ['id', 'name', 'password']
+            this.fillable = ['id', 'name', 'password', 'user_detail']
             this.presents = ['password']
+
+            //this.convert = false
 
             this.id = 0
             this.name = ''
             this.password = null
+            this.user_detail = ''
 
             this.data = data
         }

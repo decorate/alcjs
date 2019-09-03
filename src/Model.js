@@ -9,6 +9,12 @@ class Model {
         this.form = new Form
         this._fillable = []
         this._presents = []
+        this._convert = true
+
+        this.converter = {
+            snakeToCamel: snakeToCamel,
+            camelToSnake: camelToSnake
+        }
 
         this.arrayMapTarget = []
     }
@@ -57,6 +63,21 @@ class Model {
         this._presents = val
     }
 
+    get convert() {
+        return this._convert
+    }
+
+    set convert(val) {
+        this._convert = val
+
+        if(!val) {
+            this.converter = {
+                snakeToCamel: (p) => p,
+                camelToSnake: (p) => p
+            }
+        }
+    }
+
     update(data) {
         this.data = data
         return this
@@ -69,12 +90,12 @@ class Model {
     create() {
         linq.from(this.data)
             .select(x => {
-                x.key = camelToSnake(x.key)
+                x.key = this.converter.camelToSnake(x.key)
                 return x
             })
-            .where(x => this.hasOwnProperty(snakeToCamel(x.key)))
+            .where(x => this.hasOwnProperty(this.converter.snakeToCamel(x.key)))
             .select(x => {
-                const key = snakeToCamel(x.key)
+                const key = this.converter.snakeToCamel(x.key)
 
                 if (this[key] instanceof Number) {
                     x.value = Number(x.value)
@@ -96,7 +117,7 @@ class Model {
         linq.from(this.arrayMapTarget)
             .where(x => this.hasOwnProperty(x.bindKey))
             .select(x => {
-                return {originKey: x.bindKey, key: camelToSnake(x.bindKey), value: x.model}
+                return {originKey: x.bindKey, key: this.converter.camelToSnake(x.bindKey), value: x.model}
             })
             .select(x => {
                 return this[x.originKey] = linq.from(this.data[x.key])
@@ -125,7 +146,7 @@ class Model {
             .where(x => linq.from(this.fillable).any(xs => xs === x.key))
             .where(x => x.value || this.joinWhere(x))
             .select(x => {
-                const key = camelToSnake(x.key)
+                const key = this.converter.camelToSnake(x.key)
 
                 if(x.value && x.value.getPostable instanceof Function) {
                     x.value = x.value.getPostable()
