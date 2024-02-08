@@ -201,9 +201,6 @@ class Model {
     Object.keys(this.data).forEach((key) => {
       originalData[this.converter.snakeToCamel(key)] = this.data[key];
     });
-    this._fillable.map((x) => {
-      console.log(this[x], originalData[x]);
-    });
 
     return this._fillable.some((x) => this[x] != originalData[x]);
   }
@@ -212,9 +209,6 @@ class Model {
     const originalData = {};
     Object.keys(this.data).forEach((key) => {
       originalData[this.converter.snakeToCamel(key)] = this.data[key];
-    });
-    this._fillable.map((x) => {
-      console.log(this[x], originalData[x]);
     });
 
     return this._fillable.some((x) => this[x] !== originalData[x]);
